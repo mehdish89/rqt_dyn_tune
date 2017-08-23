@@ -1,0 +1,95 @@
+QPushButton::hover, QPushButton#tune_btn::hover{
+    
+    color: rgb(255, 255, 255);
+}
+
+QPushButton::pressed, QPushButton#tune_btn::pressed{
+    color: rgb(255,180,125);
+}
+
+QPushButton#tune_btn{
+    /*background-color: None;*/
+    background-color: rgb(76, 76, 76);
+    color: lightGray;
+    /*color: red;*/
+    min-height:  40;
+    padding:  0;
+    font-size: 15pt;
+    font-family: "ubuntu";
+    font-weight: bold;
+}
+
+
+QPushButton, QTextEdit#logger {
+	/*border: none;*/
+	background-color: rgb(76, 76, 76);
+    color: lightGray;
+    font-size: 13pt;
+    font-family: Courier;
+    /*min-width: 50;
+    min-height: 50;*/
+}
+
+MyBagWidget {
+	max-height: 400;
+}
+
+ParamWidget, TopicWidget{
+	height: content;
+}
+
+QGraphicsView {
+	height: content;
+}
+
+
+/* SCROLLBAR */
+
+QScrollBar:horizontal {
+    border: none;
+    background: rgb(200,200,200);
+    height: 10px;
+    margin: 0px 0px 0px 0px;
+}
+
+
+QScrollBar::handle:horizontal {
+    background: rgb(150, 150, 150);
+    min-height: 10px;
+}
+QScrollBar::add-line:horizontal {
+    background: rgb(150, 150, 150);
+    height: 0px;
+    subcontrol-position: bottom;
+    subcontrol-origin: margin;
+}
+QScrollBar::sub-line:horizontal {
+    background: rgb(150, 150, 150);
+    height: 0px;
+    subcontrol-position: top;
+    subcontrol-origin: margin;
+}
+
+
+QScrollBar:vertical {
+    border: none;
+    background: rgb(200,200,200);
+    width: 10px;
+    margin: 0px 0px 0px 0px;
+}
+QScrollBar::handle:vertical {
+    background: rgb(150, 150, 150);
+    min-height: 10px;
+}
+QScrollBar::add-line:vertical {
+    background: rgb(150, 150, 150);
+    height: 0px;
+    subcontrol-position: bottom;
+    subcontrol-origin: margin;
+}
+QScrollBar::sub-line:vertical {
+    background: rgb(150, 150, 150);
+    height: 0px;
+    subcontrol-position: top;
+    subcontrol-origin: margin;
+}

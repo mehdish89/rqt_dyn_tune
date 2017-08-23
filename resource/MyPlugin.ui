@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>RqtDynTune</class>
+ <widget class="QWidget" name="RqtDynTune">
+
+  <property name="geometry">
+   <rect>
+	<x>0</x>
+	<y>0</y>
+	<width>943</width>
+	<height>325</height>
+   </rect>
+  </property>
+
+  <property name="windowTitle">
+   <string>dyn_tune</string>
+  </property>
+
+  <layout class="QVBoxLayout" name="vLayout">
+   
+   <property name="spacing">
+	<number>4</number>
+   </property>
+
+   <property name="margin">
+	<number>4</number>
+   </property>
+
+   <item>
+   	<layout class="QHBoxLayout" name="hLayout">
+   		<item>
+   		<widget class="ParamWidget" name="_widget_param"></widget>
+   			<!-- <property name="minimumWidth">
+	        	<number>1800</number>
+	      	</property> -->
+
+   		</item>
+
+   		<!-- <item>
+   			<widget class="QTextEdit" name="line_edit">			     
+   			</widget>
+   		</item> -->
+
+   		<item>
+   			<widget class="TopicWidget" name="_widget_values">			     
+   			</widget>
+   		</item>
+
+  	</layout>
+  </item>
+
+  <item>
+   	<widget class="FuncWidget" name="_widget_func">
+
+  	</widget>
+  </item>
+
+  <item>
+   	<widget class="QTextEdit" name="logger">
+
+  	</widget>
+  </item>
+
+
+  <item>
+   	<widget class="QPushButton" name="tune_btn">
+   		<!-- <property name="maximumHeight">
+        	<number>150</number>
+      	</property> -->
+      	<property name="text">
+          <string> TUNE </string>
+        </property>
+  	</widget>
+  </item>
+
+
+  </layout>
+ </widget>
+
+ <customwidgets>
+  <customwidget>
+    <class>TopicWidget</class>
+    <extends>QWidget</extends>
+    <header>rqt_topic.topic_widget</header>
+  </customwidget>
+
+  <customwidget>
+    <class>ParamWidget</class>
+    <extends>QWidget</extends>
+    <header>rqt_topic.param_widget</header>
+  </customwidget>
+
+  <customwidget>
+    <class>FuncWidget</class>
+    <extends>QWidget</extends>
+    <header>rqt_topic.func_widget</header>
+  </customwidget>
+
+  <customwidget>
+    <class>BagWidget</class>
+    <extends>QWidget</extends>
+    <header>rqt_bag.bag_widget</header>
+  </customwidget>
+
+ </customwidgets>
+
+ <resources/>
+ <connections/>
+</ui>

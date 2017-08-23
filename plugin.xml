@@ -1,0 +1,20 @@
+<library path="src">
+  <class name="My Plugin" type="rqt_dyn_tune.rqt_dyn_tune.MyPlugin" base_class_type="rqt_gui_py::Plugin">
+    <description>
+	A generic tool for tuning parameters of a simulated robot
+    </description>
+    <qtgui>
+      <!-- optional grouping...
+      <group>
+        <label>Group</label>
+      </group>
+      <group>
+        <label>Subgroup</label>
+      </group>
+      -->
+      <label>Dynamic Parameter Tuning UI</label>
+      <icon type="theme">system-help</icon>
+      <statustip> Easily tune the parameters of simulation </statustip>
+    </qtgui>
+  </class>
+</library>

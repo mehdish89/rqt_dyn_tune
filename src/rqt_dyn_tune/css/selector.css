@@ -1,0 +1,371 @@
+* {
+    border: none;
+}
+
+
+QTreeWidget::item  {
+    min-height: 40;
+    max-height: 40;
+    color: rgb(50,50,50);
+    /*margin-left: 30;*/
+    padding-left: 30;
+    /*border: none;*/
+    /*border: 0.5, 0,0,0 solid rgb(76,76,76); */
+}       
+
+QTreeWidget::item::selected  {
+    /*max-height: 20;*/
+    /*min-height: 200;
+    max-height: 200;*/
+    color: rgb(255,180,125);
+
+    /*border: 0.5, 0,0,0 solid rgb(76,76,76); */
+}
+
+QTreeWidget::item::checked  {
+ 
+        color: red;
+
+    
+    /*selection-border: none;*/
+
+    /*border: 0.5, 0,0,0 solid rgb(76,76,76); */
+}       
+
+
+        
+QTreeView{
+
+    paint-alternating-row-colors-for-empty-area: False;
+
+    /*show-decoration-selected: 1;*/
+
+
+    selection-color: rgb(255, 255, 255);
+    selection-background-color: rgb(132, 132, 132);
+    alternate-background-color: white;
+    background-color: rgb(240, 240, 240);
+    border: 0.5 solid rgb(176,176,176); 
+    font-family: 'courier new';
+    font-size: 11pt;
+}
+
+/** {
+    text-align: right;
+}*/
+
+/*QCheckBox {
+    backgroucolor:red;
+}*/
+
+QHeaderView::section {
+    background-color: rgb(76, 76, 76);
+    color: lightGray;
+    padding-left: 30;            
+    border: 0px solid;
+    height: 40;
+    min-width: 70;   
+
+}
+
+.QLabel {
+    
+    background-color: rgb(100, 100, 100);
+}
+
+.StyledLabel {
+    background-color: rgb(76, 76, 76);
+    font-size: 13pt;
+    font-family: courier;
+    min-height: 40;
+}
+
+.StyledLabel#func_list_header, QHeaderView::section {
+    background-color: rgb(76, 76, 76);
+    color: white;
+    font-size: 14pt;
+    min-height: 40;
+    font-family: 'courier';
+    /*font-weight:  bold;*/
+    text-align: center;
+}
+
+.QListWidget#block_list {
+    background-color: rgb(127, 127, 127);
+    border: none;
+}
+
+.QListWidget#block_list, QTextEdit {
+    font-size: 13pt;
+    font-family: Courier;
+}
+
+.QListWidget#func_list{
+    font-size: 15pt;
+    font-family: courier;
+}
+
+/*QListWidget::item:hover { 
+    background: gray;
+}*/
+
+
+
+.QListWidget#func_list::item{
+    text-align: right;
+    min-height: 35;
+
+}
+
+.QListWidget#func_list{
+    selection-color: rgb(76, 76, 76);
+    selection-background-color: rgb(255, 255, 255);
+    alternate-background-color: rgb(140, 140, 140);
+    background-color: rgb(127, 127, 127);
+    color: rgb(255, 255, 255)   
+}       
+
+
+
+.QListWidget#func_list::item:selected {
+    background: rgb(255,180,125);
+    font-weight: bold;
+}
+
+
+QLineEdit, QComboBox{
+    background-color: rgb(76, 76, 76);
+    color: rgb(255, 255, 255);
+    /*min-height:  40;*/
+    /*font-size: 13pt;*/
+    /*font-family: Courier;*/
+}
+
+.QLineEdit#assign_var, .QComboBox#func_ret{
+    background-color: rgb(76, 76, 76);
+    color: rgb(255, 255, 255);
+    min-height:  40;
+    font-size: 13pt;
+    font-family: Courier;
+}
+
+
+QPushButton#add_script{
+    /*qproperty-icon: url(/home/mehdi/catkin_ws/src/rqt_topic/resource/python-btns-normal.png);*/
+    /*qproperty-icon: url(" "); 
+    qproperty-iconSize: 28px 28px; */
+    padding: 0 15 0 5 ;
+    image: url(/home/mehdi/catkin_ws/src/rqt_topic/resource/python-pressed.png);
+    background-repeat: no-repeat;
+}
+
+
+QPushButton#add_script::hover{
+    color: lightGray;
+    image: url(/home/mehdi/catkin_ws/src/rqt_topic/resource/python-normal.png);
+}
+
+QPushButton#add_script::pressed{
+    color: gray;
+    image: url(/home/mehdi/catkin_ws/src/rqt_topic/resource/python-orange.png);
+}
+
+
+QPushButton::hover, QPushButton#add_button::hover{
+    
+    color: rgb(255, 255, 255);
+}
+
+QPushButton::pressed, QPushButton#add_button::pressed{
+    color: rgb(255,180,125);
+}
+
+QPushButton{
+    /*background-color: None;*/
+    background-color: rgb(76, 76, 76);
+    color: lightGray;
+    /*color: red;*/
+    min-height:  40;
+    padding:  0;
+    font-size: 25pt;
+    font-family: Courier;
+    font-weight: bold;
+}
+
+QComboBox QAbstractItemView::item {
+    border-bottom: 5px solid white; margin:3px;
+}
+
+QComboBox:item
+{
+     border: 0px solid #999900;
+     background: transparent;
+     font-weight: bold;
+}
+
+
+QHeaderView{
+    /*font-size: 13pt;
+    font-family: courier;
+    font-weight: bold*/
+    background-color: gray;
+}
+
+#func_ret {
+    /*border: 5px solid rgba(176, 76, 76, 0);*/
+    background-color: red;/*rgb(132, 132, 132);*/
+}
+
+
+ParamWidget {
+    width: content;
+}
+
+TopicWidget {
+    width: content;
+}
+
+
+
+/*QHeaderView::section:checked
+{
+    background-color: red;
+}*/
+
+/* style the sort indicator */
+/*QHeaderView::down-arrow {
+    image: url(down_arrow.png);
+}
+
+QHeaderView::up-arrow {
+    image: url(up_arrow.png);
+}*/
+
+
+/*QCheckBox {
+    spacing: 5px;
+}
+
+QTreeWidget::indicator {
+    width: 13px;
+    height: 13px;
+}*/
+/*
+QCheckBox::indicator:unchecked {
+    image: url(:/images/checkbox_unchecked.png);
+}
+
+QCheckBox::indicator:unchecked:hover {
+    image: url(:/images/checkbox_unchecked_hover.png);
+}
+
+QCheckBox::indicator:unchecked:pressed {
+    image: url(:/images/checkbox_unchecked_pressed.png);
+}
+
+QCheckBox::indicator:checked {
+    image: url(:/images/checkbox_checked.png);
+}
+
+QCheckBox::indicator:checked:hover {
+    image: url(:/images/checkbox_checked_hover.png);
+}
+
+QCheckBox::indicator:checked:pressed {
+    image: url(:/images/checkbox_checked_pressed.png);
+}
+
+QCheckBox::indicator:indeterminate:hover {
+    image: url(:/images/checkbox_indeterminate_hover.png);
+}
+
+QCheckBox::indicator:indeterminate:pressed {
+    image: url(:/images/checkbox_indeterminate_pressed.png);
+}*/
+
+
+QCheckBox {
+    spacing: 5px;
+}
+
+*::indicator {
+    width: 20px;
+    height: 20px;
+}
+
+/**::indicator:unchecked {
+    image: url(/home/mehdi/catkin_ws/src/rqt_dyn_tune/src/rqt_dyn_tune/css/image/checkbox_unchecked.png);
+}*/
+
+/*QCheckBox::indicator:unchecked:hover {
+    image: url(:/images/checkbox_unchecked_hover.png);
+}
+
+QCheckBox::indicator:unchecked:pressed {
+    image: url(:/images/checkbox_unchecked_pressed.png);
+}*/
+
+/**::indicator:checked {
+    image: url(/home/mehdi/catkin_ws/src/rqt_dyn_tune/src/rqt_dyn_tune/css/image/checkbox_checked.png);
+}*/
+
+/*QCheckBox::indicator:checked:hover {
+    image: url(:/images/checkbox_checked_hover.png);
+}
+
+QCheckBox::indicator:checked:pressed {
+    image: url(:/images/checkbox_checked_pressed.png);
+}
+
+QCheckBox::indicator:indeterminate:hover {
+    image: url(:/images/checkbox_indeterminate_hover.png);
+}
+
+QCheckBox::indicator:indeterminate:pressed {
+    image: url(:/images/checkbox_indeterminate_pressed.png);
+}*/
+
+
+/*QComboBox {
+    border: 1px solid gray;
+    border-radius: 3px;
+    padding: 1px 18px 1px 3px;
+    min-width: 6em;
+}
+
+QComboBox:editable {
+    background: red;
+}*/
+
+/*QComboBox:!editable, QComboBox::drop-down:editable {
+     background: red;
+     width: 0;
+     height: 0;
+}*/
+
+
+/*QComboBox:!editable:on, QComboBox::drop-down:editable:on {
+    background: red;
+}
+
+QComboBox:on { 
+    padding-top: 3px;
+    padding-left: 4px;
+}
+
+QComboBox::drop-down {
+    background-color: red
+
+    subcontrol-origin: padding;
+    subcontrol-position: top right;
+    width: 15px;
+    height: 150;
+    line-height: 50
+
+    border-left-width: 1px;
+    border-left-color: darkgray;
+    border-left-style: solid; 
+    border-top-right-radius: 3px; 
+    border-bottom-right-radius: 3px;
+}*/
+

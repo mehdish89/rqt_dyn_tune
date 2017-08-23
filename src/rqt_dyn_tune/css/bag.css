@@ -1,0 +1,36 @@
+QPushButton, * {
+	/*border: none;*/
+	background-color: rgb(76, 76, 76);
+    color: lightGray;
+    /*min-width: 50;
+    min-height: 50;*/
+}
+
+QPushButton{
+	border: none;
+	min-width: 50;
+    min-height: 50;	
+}
+
+QToolTip {
+	background-color: lightGray;
+	color: rgb(76, 76, 76);
+	min-height: content;
+}
+
+#line_4, #line_3, #line_2, #line_1, #line {
+	border: none;
+/*	min-width: 50;
+	height: 50;*/
+}
+
+/*#line_4 {
+	border: none;
+	min-width: 2000;
+	height: 50;
+}*/
+
+
+QProgressBar, QLabel {
+	border: 0 1 0 1 solid gray;
+}
