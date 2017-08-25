@@ -1,3 +1,4 @@
+import sys
 import os
 import rospy
 import rospkg
@@ -25,6 +26,15 @@ import argparse
 
 from rqt_bag.player import Player
 from rosgraph_msgs.msg import Log
+
+from dyn_tune import function
+
+python_pkg_path = os.path.join(rospkg.RosPack().get_path('dyn_tune'), 'src', 'dyn_tune')
+
+if python_pkg_path not in sys.path:
+    sys.path.insert(0, python_pkg_path)
+
+
 
 class MyPlayer(Player):
     def create_publisher(self, topic, msg, prefix = "/GROUND_TRUTH"):
@@ -217,12 +227,6 @@ class DynTuneUI(Plugin):
         super(DynTuneUI, self).__init__(context)
         
         # rospy.init_node('rqt_dyn_tune')
-
-
-        
-
-
-
         # Give QObjects reasonable names
         self.setObjectName('dyn_tune_plugin')
 
