@@ -81,25 +81,19 @@
   <customwidget>
     <class>TopicWidget</class>
     <extends>QWidget</extends>
-    <header>rqt_topic.topic_widget</header>
+    <header>rqt_dyn_tune.topic_widget</header>
   </customwidget>
 
   <customwidget>
     <class>ParamWidget</class>
     <extends>QWidget</extends>
-    <header>rqt_topic.param_widget</header>
+    <header>rqt_dyn_tune.param_widget</header>
   </customwidget>
 
   <customwidget>
     <class>FuncWidget</class>
     <extends>QWidget</extends>
-    <header>rqt_topic.func_widget</header>
-  </customwidget>
-
-  <customwidget>
-    <class>BagWidget</class>
-    <extends>QWidget</extends>
-    <header>rqt_bag.bag_widget</header>
+    <header>rqt_dyn_tune.func_widget</header>
   </customwidget>
 
  </customwidgets>

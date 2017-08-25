@@ -1,7 +1,7 @@
 <library path="src">
-  <class name="My Plugin" type="rqt_dyn_tune.rqt_dyn_tune.MyPlugin" base_class_type="rqt_gui_py::Plugin">
+  <class name="DynamicTuning" type="rqt_dyn_tune.rqt_dyn_tune.DynTuneUI" base_class_type="rqt_gui_py::Plugin">
     <description>
-	A generic tool for tuning parameters of a simulated robot
+	A generic tool for tuning parameters in ROS
     </description>
     <qtgui>
       <!-- optional grouping...
@@ -13,8 +13,8 @@
       </group>
       -->
       <label>Dynamic Parameter Tuning UI</label>
-      <icon type="theme">system-help</icon>
-      <statustip> Easily tune the parameters of simulation </statustip>
+      <!-- <icon type="theme">system-help</icon> -->
+      <statustip> Easily tune the parameters of your robotics system, e.g. PIDs, physics parameters, sensor/camera parameters, etc. </statustip>
     </qtgui>
   </class>
 </library>

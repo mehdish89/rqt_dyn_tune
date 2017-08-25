@@ -11,13 +11,13 @@ from python_qt_binding.QtCore import Qt, QTimer, Signal, Slot, QRegExp, pyqtSign
 from python_qt_binding.QtGui import QIcon, QFont, QFontMetrics, QPalette, QBrush
 from python_qt_binding.QtGui import QIcon, QFont, QFontMetrics, QTextDocument, QTextOption, QPen, QPainter, QColor, QTextCursor
 
-from rqt_topic import syntax
+import syntax
 
 from dyn_tune.msg import Experiment
 from dyn_tune.srv import *
 
 from rqt_bag.bag_widget import BagWidget
-from rqt_topic.func_widget import StyledLabel
+from .func_widget import StyledLabel
 
 import json
 
@@ -206,7 +206,7 @@ class MyBagWidget(BagWidget):
         self._history_top = 30
 
 
-class MyPlugin(Plugin):
+class DynTuneUI(Plugin):
 
     loggerUpdate = Signal(str, name='loggerUpdate')
 
@@ -214,9 +214,11 @@ class MyPlugin(Plugin):
     
 
     def __init__(self, context):
-        super(MyPlugin, self).__init__(context)
+        super(DynTuneUI, self).__init__(context)
         
         # rospy.init_node('rqt_dyn_tune')
+
+
         
 
 
@@ -244,11 +246,11 @@ class MyPlugin(Plugin):
 
 
         # Get path to UI file which should be in the "resource" folder of this package
-        ui_file = os.path.join(rospkg.RosPack().get_path('rqt_dyn_tune'), 'resource', 'MyPlugin.ui')
+        ui_file = os.path.join(rospkg.RosPack().get_path('rqt_dyn_tune'), 'resource', 'DynTune.ui')
         # Extend the widget with all attributes and children from UI file
         loadUi(ui_file, self._widget)
         # Give QObjects reasonable names
-        self._widget.setObjectName('MyPluginUi')
+        self._widget.setObjectName('DynTuneUI')
 
         self._widget.vLayout.insertWidget(1, self._bag_widget, 0)
         self._widget.vLayout.setStretchFactor(self._widget.hLayout, 1)

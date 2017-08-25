@@ -151,23 +151,23 @@ QLineEdit, QComboBox{
 
 
 QPushButton#add_script{
-    /*qproperty-icon: url(/home/mehdi/catkin_ws/src/rqt_topic/resource/python-btns-normal.png);*/
+    /*qproperty-icon: url(/home/mehdi/catkin_ws/src/rqt_dyn_tune/resource/python-btns-normal.png);*/
     /*qproperty-icon: url(" "); 
     qproperty-iconSize: 28px 28px; */
     padding: 0 15 0 5 ;
-    image: url(/home/mehdi/catkin_ws/src/rqt_topic/resource/python-pressed.png);
+    image: url(/home/mehdi/catkin_ws/src/rqt_dyn_tune/resource/python-pressed.png);
     background-repeat: no-repeat;
 }
 
 
 QPushButton#add_script::hover{
     color: lightGray;
-    image: url(/home/mehdi/catkin_ws/src/rqt_topic/resource/python-normal.png);
+    image: url(/home/mehdi/catkin_ws/src/rqt_dyn_tune/resource/python-normal.png);
 }
 
 QPushButton#add_script::pressed{
     color: gray;
-    image: url(/home/mehdi/catkin_ws/src/rqt_topic/resource/python-orange.png);
+    image: url(/home/mehdi/catkin_ws/src/rqt_dyn_tune/resource/python-orange.png);
 }
 
 
