@@ -56,11 +56,10 @@ CHECK_COLUMN = 5
 
 class EditorDelegate(QStyledItemDelegate):
 
-    def __init__(self, parent = None):
-        super(QStyledItemDelegate, self).__init__(parent)
-        print "constructor"
-
     _column_names = ['topic', 'type', 'min', 'value', 'max', 'checkbox']
+
+    def __init__(self, parent = None):
+        super(QStyledItemDelegate, self).__init__(parent)    
 
     def createEditor(self, parent, option, index):
 
@@ -71,50 +70,31 @@ class EditorDelegate(QStyledItemDelegate):
         if index.column() not in indices:
             return None
 
-
-
-        print "create_edit"
+        # TODO: clean up here and make it shorter
 
         if index.column() == 3:
-                
+
             widget = QWidget(parent)
-
-            slider = QSlider(Qt.Horizontal, widget)
-
-
-            text_edit = QLineEdit(widget)
-            text_edit.setFocus()
-            text_edit.selectAll()
-
-            text_edit.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
-
-            hbox = QVBoxLayout()
-
-            # slider.setMinimumWidth(400)
-
-            # hbox.setMargin(0);
-            hbox.setContentsMargins(2,1,2,1);
-
-            # min_label = QLabel("min")
-            # max_label = QLabel("max")
-            # vbox.addWidget(min_label)
             
-            
-            hbox.addWidget(slider)
-            hbox.addWidget(text_edit)
-            # vbox.addWidget(max_label)
-
-            
-            widget.setLayout(hbox)
-            # widget.setMinimumWidth(400)
-
-            slider.setMinimumHeight(32)
-            text_edit.setMinimumHeight(36)
-
             widget.setMinimumHeight(80)
             widget.setAutoFillBackground(True)
             widget.setStyleSheet(".QWidget { background:rgb(200, 200, 200); margin:0px; border:1px solid rgb(170, 170, 170); }")
-            # parent.setMinimumWidth(300)
+        
+            text_edit = QLineEdit(widget)
+            text_edit.setFocus()
+            text_edit.selectAll()
+            text_edit.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
+            text_edit.setMinimumHeight(36)
+
+            slider = QSlider(Qt.Horizontal, widget)
+            slider.setMinimumHeight(32)
+            
+            hbox = QVBoxLayout()
+            hbox.setContentsMargins(2,1,2,1);         
+            hbox.addWidget(slider)
+            hbox.addWidget(text_edit)
+            
+            widget.setLayout(hbox)
 
             row = index.row()
             imin = index.sibling(row, self._column_names.index("min"))
@@ -195,51 +175,33 @@ class EditorDelegate(QStyledItemDelegate):
 
             @Slot(str)
             def lineEditTextChanged(text):
-                # text_edit.setText(str(value))                
-
-                # slider.setSliderDown(True)
-
-                # slider.sliderPressed.emit()
-                print "setSliderDown"
-
                 if not isFloat(text):
-                    return
-
-                
+                    return                
 
                 value = float(text)
                 nvalue = value
-                # nvalue = min(nvalue, fmax)
-                # nvalue = max(nvalue, fmin)
-                # print "nvalue is", nvalue
 
                 if value != nvalue:
                     text_edit.setText(str(nvalue))
 
                 svalue = int(nvalue*100)
 
-                print "text changed to %s" % text
-                print "nvalue is", nvalue
-                print "svalue is %d" % svalue
+                # print "text changed to %s" % text
+                # print "nvalue is", nvalue
+                # print "svalue is %d" % svalue
 
                 slider.blockSignals(True)
                 slider.setSliderPosition(svalue)
                 slider.blockSignals(False)
-
-                
                 pass
 
+
             slider.valueChanged.connect(sliderValueChanged)
-
             slider.sliderPressed.connect(sliderDown)
-
             slider.sliderReleased.connect(sliderUp)
 
             text_edit.textChanged.connect(lineEditTextChanged)
             text_edit.editingFinished.connect(editingFinished)
-
-
-            
 
             text_edit.selectAll()
             text_edit.setFocus()
@@ -262,7 +224,7 @@ class EditorDelegate(QStyledItemDelegate):
             rx = QRegExp("^-?([1-9]\d*|0)(\.\d*)?$")
             v = QRegExpValidator(rx);
             edt.setValidator(v)
-        # edt.setInputMask("#00000000")
+
         return edt    
 
     def setModelData(self, editor, model, index):
@@ -294,10 +256,6 @@ class EditorDelegate(QStyledItemDelegate):
         vmax = tryFloat(vmax)
         val = tryFloat(val)
 
-        # vmin = int(float(vmin))
-        # vmax = int(float(vmax))
-        # val = int(float(val))
-
         print vmin, val, vmax
 
         if index.column() == self._column_names.index("min"):
@@ -327,20 +285,13 @@ class EditorDelegate(QStyledItemDelegate):
                 model.setData(imin, str(val), Qt.UserRole)
 
 
-
-        print "data"
-
     def setEditorData(self, editor, index):
 
         value = index.model().data(index, Qt.EditRole)
-        # value = index.data(Qt.EditRole)
-        print "edit_data ", value
-        # editor.setText(value)
 
         if index.column() == 3:
             slider = editor.findChild(QSlider)        
             slider.setSliderDown(True)
-            # slider.grabMouse()
 
             text_edit = editor.findChild(QLineEdit)        
             text_edit.setText(value)
@@ -372,48 +323,11 @@ class ParamWidget(QWidget):
 
 
     def keyPressEvent(self, event):
-        # super(QWidget, self).keyPressEvent(event)
         event.ignore()
-        print "key pressed"
-        return
 
-
-
-        current = self.topics_tree_widget.currentItem()
-        column = self.topics_tree_widget.currentColumn()
-
-        if event.key() == Qt.Key_Right:
-            self.topics_tree_widget.setCurrentItem(current, column+1)
-            print "right is pressed"
-            event.ignore()
-            return
-
-        if event.key() == Qt.Key_Left:
-            self.topics_tree_widget.setCurrentItem(current, column-1)
-            print "left is pressed"
-            return
-
-
-        # event.accept()
 
     def keyReleaseEvent(self, event):
-        print "key released"
         event.ignore()
-        return 
-        current = self.topics_tree_widget.currentItem()
-        column = self.topics_tree_widget.currentColumn()
-
-        
-
-        # print "current is ", current, " at ", column
-        # self.topics_tree_widget.editItem(current, column)
-
-        print event.key()
-        event.accept()
-
-
-        # if event.key() == Qt.Key_Escape:
-        #     self.close()
 
     def __init__(self, plugin=None, selected_topics=None, select_topic_type=SELECT_BY_NAME):
         """
@@ -470,33 +384,14 @@ class ParamWidget(QWidget):
 
         self.topics_tree_widget.itemExpanded.connect(self.expanded)
         self.topics_tree_widget.itemCollapsed.connect(self.collapsed)
-
         self.topics_tree_widget.itemChanged.connect(self.itemChanged)
 
         self.topics_tree_widget.setAlternatingRowColors(True)
 
         delegate = EditorDelegate()
         self.topics_tree_widget.setItemDelegate(delegate)
-        # self.topics_tree_widget.setItemDelegateForColumn(1, delegate)
-
-        # print(self.topics_tree_widget.itemDelegate())
-        # print(self.topics_tree_widget.itemDelegate(3))
-        # print(self.topics_tree_widget.itemDelegateForColumn(1))
-
-        
         self.topics_tree_widget.setEditTriggers(QAbstractItemView.AnyKeyPressed | QAbstractItemView.DoubleClicked  )
-
         
-        @Slot(QTreeWidgetItem, int)
-        def currentChanged(current, column):
-            # column = self.topics_tree_widget.currentColumn()
-            print "current is ", current, " at ", column
-            # print "previous is ", previous,
-
-            # self.topics_tree_widget.editItem(current, column)
-
-        # self.topics_tree_widget.currentItemChanged.connect(currentChanged)
-        # self.topics_tree_widget.itemActivated.connect(currentChanged)
 
         hitem = self.topics_tree_widget.headerItem()
         hitem.setTextAlignment(self._column_names.index("min"), Qt.AlignRight | Qt.AlignVCenter)
@@ -505,23 +400,9 @@ class ParamWidget(QWidget):
         hitem.setTextAlignment(self._column_names.index("type"), Qt.AlignHCenter | Qt.AlignVCenter)
 
 
-
-        # self.refresh_topics()
-
         # init and start update timer
         self._timer_refresh_topics = QTimer(self)
         self._timer_refresh_topics.timeout.connect(self.refresh_topics)
-
-
-        # @Slot()
-        # def test():
-        #     print "@@@@@@@@@@@@@@@@@@@@@@@@@@2 data changed @@@@@@@@@@@@@@@@@@@@@@2222@@@@@@@"
-
-        # self.topics_tree_widget.model().dataChanged.connect(test)
-
-        
-
-        # print dir(self.selectionChanged)
 
         @Slot(dict)
         def selection_changed(data):
@@ -607,8 +488,6 @@ class ParamWidget(QWidget):
             parent = self.topics_tree_widget
 
         pnames = param_name.split("/")        
-
-        print pnames
         
         ns = ""
         item = parent
@@ -620,16 +499,11 @@ class ParamWidget(QWidget):
             ns = ns + _name
 
             if ns not in self._tree_items:
-                # print ">>>> ",  ns
                 _item = TreeWidgetItem(self._toggle_monitoring, ns, item)
                 _item.setText(self._column_index['topic'], _name)
                 _item.setData(0, Qt.UserRole, "name_space")
-
                 _item.setFlags(Qt.ItemIsEnabled | Qt.ItemIsUserCheckable | Qt.ItemIsTristate)
-
                 self._tree_items[ns] = _item 
-                # _item.setText(self._column_index['type'], type_name)
-                # _item.setData(0, Qt.UserRole, name_space)
 
             item = self._tree_items[ns]
 
@@ -658,7 +532,6 @@ class ParamWidget(QWidget):
         """
         refresh tree view items
         """
-        # print "is refreshing"
 
         nodes = dynamic_reconfigure.find_reconfigure_services()
         # dparams = []
@@ -669,8 +542,6 @@ class ParamWidget(QWidget):
             for pdesc in gdesc["parameters"]:
                 param = node + "/" + pdesc["name"]
                 dparams[param] = pdesc
-
-        # dparams = dparams.items()
 
         for param, desc in self._current_params.items():
             if param not in dparams:
@@ -683,76 +554,6 @@ class ParamWidget(QWidget):
                 self.insert_param(param, desc)
 
 
-        # print self._current_params
-
-        # print self._tree_items
-
-        # dparams = rospy.get_published_topics()
-
-        # print self._items_param
-
-        # selected_dict = { self._selected_items[index] : index for index in range(len(self._selected_items)) }
-        # print selected_dict
-        # print self._selected_items
-        # print self.get_selected()
-
-        return 
-
-
-        try:
-            if self._selected_topics is None:
-                topic_list = dparams
-                if topic_list is None:
-                    rospy.logerr('Not even a single published topic found. Check network configuration')
-                    return
-        except IOError as e:
-            rospy.logerr("Communication with rosmaster failed: {0}".format(e.strerror))
-            return
-
-        if self._current_topic_list != topic_list:
-            self._current_topic_list = topic_list
-
-            print "is updating"
-
-            # start new topic dict
-            new_topics = {}
-
-            for topic_name, topic_type in topic_list:
-                # if topic is new or has changed its type
-                if topic_name not in self._topics or \
-                   self._topics[topic_name]['type'] != topic_type:
-                    # create new TopicInfo
-                    topic_info = TopicInfo(topic_name, topic_type)
-                    message_instance = None
-                    if topic_info.message_class is not None:
-                        message_instance = topic_info.message_class()
-                    # add it to the dict and tree view
-                    topic_item = self._recursive_create_widget_items(self.topics_tree_widget, topic_name, topic_type, message_instance)
-                    new_topics[topic_name] = {
-                       'item': topic_item,
-                       'info': topic_info,
-                       'type': topic_type,
-                    }
-                else:
-                    # if topic has been seen before, copy it to new dict and
-                    # remove it from the old one
-                    new_topics[topic_name] = self._topics[topic_name]
-                    del self._topics[topic_name]
-
-            # clean up old topics
-            for topic_name in self._topics.keys():
-                self._topics[topic_name]['info'].stop_monitoring()
-                index = self.topics_tree_widget.indexOfTopLevelItem(
-                                           self._topics[topic_name]['item'])
-                self.topics_tree_widget.takeTopLevelItem(index)
-                del self._topics[topic_name]
-
-            # switch to new topic dict
-            self._topics = new_topics
-
-
-
-        # self._update_topics_data()
 
     def _update_topics_data(self):
 
@@ -787,8 +588,6 @@ class ParamWidget(QWidget):
                 bandwidth_text = ''
                 value_text = 'not monitored' if topic_info.error is None else topic_info.error
 
-            # self._tree_items[topic_info._topic_name].setText(self._column_index['rate'], rate_text)
-            # self._tree_items[topic_info._topic_name].setText(self._column_index['bandwidth'], bandwidth_text)
             self._tree_items[topic_info._topic_name].setText(self._column_index['value'], value_text)
 
     def update_value(self, topic_name, message):
@@ -829,9 +628,6 @@ class ParamWidget(QWidget):
         if parent is self.topics_tree_widget:
             # show full topic name with preceding namespace on toplevel item
             topic_text = topic_name
-            # item = TreeWidgetItem(self._toggle_monitoring, topic_name, parent)
-
-
             _item = parent
             topic_names = topic_name.split('/')
             name_space = ""
@@ -841,13 +637,9 @@ class ParamWidget(QWidget):
                 _name = "/" + name
                 name_space = name_space + _name
                 if name_space not in self._tree_items:
-                    print ">>>"+name_space
-
                     is_topic = False
-
                     if name_space == topic_name:
                         is_topic = True
-
 
                     _item = TreeWidgetItem(self._toggle_monitoring, name_space, _item, is_topic = is_topic)
                     _item.setText(self._column_index['topic'], _name)
@@ -856,14 +648,9 @@ class ParamWidget(QWidget):
 
                     self._tree_items[name_space] = _item
 
-
-
-
                 _item = self._tree_items[name_space]
 
             item = _item
-
-
 
         else:
             topic_text = topic_name.split('/')[-1]
@@ -872,9 +659,6 @@ class ParamWidget(QWidget):
 
 
             item = TreeWidgetItem(self._toggle_monitoring, topic_name, parent)
-            # item = QTreeWidgetItem(parent)
-            # item.setCheckState(0, Qt.Unchecked)
-
             item.setText(self._column_index['topic'], topic_text)
             item.setText(self._column_index['type'], type_name)
             item.setData(0, Qt.UserRole, topic_name)
@@ -905,23 +689,14 @@ class ParamWidget(QWidget):
             print "start %s" % topic_name
             if topic_name not in self._selected_items and topic_name in self._current_params:
                 self._selected_items.append(topic_name)
-                # item.setText(CHECK_COLUMN, str(self._selected_items.index(topic_name)))
-            # self._topics[topic_name]['info'].start_monitoring()
         else:
             print "stop %s" % topic_name
             if topic_name in self._selected_items:
                 self._selected_items.remove(topic_name)
             item.setText(CHECK_COLUMN,'')
 
-        # sel = self._selected_items
-        # for i in range(len(sel)):
-        #     if sel[i] in self._current_params:
-        #         _item = self._tree_items[sel[i]]
-        #         _item.setText(CHECK_COLUMN, '{%d}' % i )
-
         self.selectionChanged.emit(self.get_selected())
 
-            # self._topics[topic_name]['info'].stop_monitoring()
         
 
     def _recursive_delete_widget_items(self, item):
@@ -1024,6 +799,8 @@ class TreeWidgetItem(QTreeWidgetItem):
         self._is_topic = is_topic
         
         self._slider = QSlider(Qt.Horizontal)
+        self._slider.valueChanged.connect(self.sliderValueChanged)
+
         self._hbox = QHBoxLayout()
         self._min_label = QLabel("min")
         self._max_label = QLabel("max")
@@ -1034,7 +811,6 @@ class TreeWidgetItem(QTreeWidgetItem):
         tree = self.treeWidget()
         widget = QWidget()
         widget.setLayout(self._hbox)
-        # tree.setItemWidget(self, 3, widget)        
 
         self.setTextAlignment(self._column_names.index("min"), Qt.AlignRight | Qt.AlignVCenter)
         self.setTextAlignment(self._column_names.index("max"), Qt.AlignLeft | Qt.AlignVCenter)
@@ -1043,28 +819,16 @@ class TreeWidgetItem(QTreeWidgetItem):
 
         self.setFlags(Qt.ItemIsEditable | Qt.ItemIsEnabled | Qt.ItemIsSelectable | Qt.ItemIsUserCheckable )
 
-        self._slider.valueChanged.connect(self.sliderValueChanged)
-
-
+        
 
     @Slot(int)
     def sliderValueChanged(self, value):
         self.setText(2, str(value))
-        print "value changed to %d" % value
         pass
-
-
-
-        # print(topic_name)
 
     def setData(self, column, role, value):
         if role == Qt.CheckStateRole:
             state = self.checkState(column)
-            # if state:
-            #     item.setAutoFillBackground
-        
-        # if state:
-        #     super(TreeWidgetItem, self).setData(column, Qt.UserRole, self._selected_items.index(self._topic_name))    
 
         super(TreeWidgetItem, self).setData(column, role, value)
 

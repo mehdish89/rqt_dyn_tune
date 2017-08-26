@@ -100,12 +100,7 @@ class TopicWidget(QWidget):
 		setSectionResizeMode(3, QHeaderView.ResizeToContents)
 
 		self.topics_tree_widget.setSelectionMode(QAbstractItemView.MultiSelection)
-		
-		# setSectionResizeMode(3, QHeaderView.Fixed)
-
-		# header.customContextMenuRequested.connect(self.handle_header_view_customContextMenuRequested)
-		# header.setContextMenuPolicy(Qt.CustomContextMenu)
-
+	
 		# Whether to get all topics or only the topics that are set in advance.
 		# Can be also set by the setter method "set_selected_topics".
 		self._selected_topics = selected_topics
@@ -125,7 +120,6 @@ class TopicWidget(QWidget):
 		self.topics_tree_widget.itemExpanded.connect(self.expanded)
 		self.topics_tree_widget.itemCollapsed.connect(self.collapsed)
 
-		# self.refresh_topics()
 
 		# init and start update timer
 		self._timer_refresh_topics = QTimer(self)
@@ -161,20 +155,6 @@ class TopicWidget(QWidget):
 				item.setText(3, '')
 
 		self.selectionChanged.emit(selected)
-
-		
-		
-
-		# for item in selected:
-		#     # item.setData(self._column_names.index("checkbox") ,True, Qt.CheckStateRole)
-		#     item.setCheckState(self._column_names.index("checkbox"), Qt.Checked)
-
-		# for _, item in self._tree_items.items():
-		#     if item not in selected:
-		#         # item.setData(self._column_names.index("checkbox") ,False, Qt.CheckStateRole)                
-		#         item.setCheckState(self._column_names.index("checkbox"), Qt.Unchecked)
-
-		# self._selected_items = map(lambda item: item.data(0, Qt.EditRole), selected)
 
 		pass
 
@@ -220,12 +200,7 @@ class TopicWidget(QWidget):
 
 	def get_selected(self):
 		# param_name:desc
-		# print self._selected_items
 		self._selected_items = [ item._topic_name for item in self.topics_tree_widget.selectedItems() ]
-
-		# print self._selected_items
-		# print self.topics_tree_widget.selectedItems()
-
 		return self._selected_items
 
 	def get_selected_values(self):
@@ -233,17 +208,12 @@ class TopicWidget(QWidget):
 		self.get_selected()
 		items = self._selected_items       
 		values = {item: self.values[item] for item in items if item in self.values}
-
-		# print "NEW_VALUES: ", values        
-
 		return values
 
 	def get_selected_types(self):
-		# self._tree_items[topic_name].setText(self._column_index['value'], repr(message))
 		self.get_selected()
 		f = lambda item: self._tree_items[item].data(self._column_index['type'], Qt.EditRole)
 		selected_types = map(f, self._selected_items)
-		# print selected_types
 		return selected_types
 
 
@@ -252,9 +222,6 @@ class TopicWidget(QWidget):
 		"""
 		refresh tree view items
 		"""
-		# print "is refreshing"
-		
-
 
 		try:
 			if self._selected_topics is None:
@@ -375,8 +342,6 @@ class TopicWidget(QWidget):
 				bandwidth_text = ''
 				value_text = 'not monitored' if topic_info.error is None else topic_info.error
 
-			# self._tree_items[topic_info._topic_name].setText(self._column_index['rate'], rate_text)
-			# self._tree_items[topic_info._topic_name].setText(self._column_index['bandwidth'], bandwidth_text)
 			self._tree_items[topic_info._topic_name].setText(self._column_index['value'], value_text)
 
 	def update_value(self, topic_name, message, vtype = None):
@@ -429,8 +394,6 @@ class TopicWidget(QWidget):
 		if parent is self.topics_tree_widget:
 			# show full topic name with preceding namespace on toplevel item
 			topic_text = topic_name
-			# item = TreeWidgetItem(self._toggle_monitoring, topic_name, parent)
-
 
 			_item = parent
 			topic_names = topic_name.split('/')
@@ -441,13 +404,11 @@ class TopicWidget(QWidget):
 				_name = "/" + name
 				name_space = name_space + _name
 				if name_space not in self._tree_items:
-					print ">>>"+name_space
 
 					is_topic = False
 
 					if name_space == topic_name:
 						is_topic = True
-
 
 					_item = TreeWidgetItem(self._toggle_monitoring, name_space, _item, is_topic = is_topic)
 					_item.setText(self._column_index['topic'], _name)
@@ -455,9 +416,6 @@ class TopicWidget(QWidget):
 					_item.setData(0, Qt.UserRole, name_space)
 
 					self._tree_items[name_space] = _item
-
-
-
 
 				_item = self._tree_items[name_space]
 
@@ -472,9 +430,6 @@ class TopicWidget(QWidget):
 
 
 			item = TreeWidgetItem(self._toggle_monitoring, topic_name, parent)
-			# item = QTreeWidgetItem(parent)
-			# item.setCheckState(0, Qt.Unchecked)
-
 			item.setText(self._column_index['topic'], topic_text)
 			item.setText(self._column_index['type'], type_name)
 			item.setData(0, Qt.UserRole, topic_name)
@@ -500,27 +455,12 @@ class TopicWidget(QWidget):
 
 
 	def _toggle_monitoring(self, topic_name):
-		# item = self._tree_items[topic_name]
-		# if item.checkState(3):
-		#     print "start %s" % topic_name
-		#     if topic_name not in self._selected_items:
-		#         self._selected_items.append(topic_name)
-		#         # item.setText(3, str(self._selected_items.index(topic_name)))
-		#     # self._topics[topic_name]['info'].start_monitoring()
-		# else:
-		#     print "stop %s" % topic_name
-		#     if topic_name in self._selected_items:
-		#         self._selected_items.remove(topic_name)
-		#     item.setText(3,'')
-
 		self.get_selected()
 
 		sel = self._selected_items
 		for i in range(len(sel)):
 			_item = self._tree_items[sel[i]]
 			_item.setText(3, '{%d}' % i )
-
-			# self._topics[topic_name]['info'].stop_monitoring()
 
 		self.selectionChanged.emit(self.get_selected())
 		
@@ -606,42 +546,10 @@ class TreeWidgetItem(QTreeWidgetItem):
 		# self.setCheckState(3, Qt.Unchecked)
 		self._is_topic = is_topic
 		
-		# self._slider = QSlider(Qt.Horizontal)
-
-		# tree = self.treeWidget()
-		# tree.setItemWidget(self, 4, self._slider)        
-
-		# self._slider.valueChanged.connect(self.sliderValueChanged)
-
-		# print ">>>>>>>>>>>>>> %s" %  self._slider
-
-	# @Slot(int)
-	# def sliderValueChanged(self, value):
-	#     self.setText(2, str(value))
-	#     print "value changed to %d" % value
-	#     pass
-
-
-
-		# print(topic_name)
-
+	
 	def setData(self, column, role, value):
-		# if role == Qt.CheckStateRole:
-		#     state = self.checkState(column)
-			# if state != self.isSelected():
-			#     self.setSelected(state)
-			#     return
-
-		
-		# if state:
-		#     super(TreeWidgetItem, self).setData(column, Qt.UserRole, self._selected_items.index(self._topic_name))    
-
 		super(TreeWidgetItem, self).setData(column, role, value)
 
-
-
-		# if role == Qt.CheckStateRole and state != self.checkState(column):
-		# self._check_state_changed_callback(self._topic_name)
 
 
 

@@ -72,12 +72,10 @@ class FuncEditorDelegate(QStyledItemDelegate):
 		super(QStyledItemDelegate, self).__init__(parent)
 		self.block = False
 		self.editor = None
-		# self.setClipping(False)
 
 
 	def createEditor(self, parent, option, index):        
 		editor = QTextEdit(parent)
-		# 
 		highlight = syntax.PythonHighlighter(editor.document())
 
 		font = QFont("Courier")
@@ -88,17 +86,12 @@ class FuncEditorDelegate(QStyledItemDelegate):
 		editor.setFont(font)
 
 		tab_stop = 4;  # 4 characters
-
 		metrics = QFontMetrics(font)
 		editor.setTabStopWidth(tab_stop * metrics.width(' '));
 
-		# editor.setTextInteractionFlags(Qt.NoTextInteraction)
-
 		return editor
-		pass  
 
 	def setModelData(self, editor, model, index):
-		# index.model().setData(index, editor.toHtml(), Qt.DisplayRole)
 		index.model().setData(index, editor.toPlainText(), Qt.EditRole)
 		self.editor = None
 		self.block = False
@@ -111,15 +104,12 @@ class FuncEditorDelegate(QStyledItemDelegate):
 		editor.setPlainText(index.data(Qt.EditRole))
 
 		def text_changed():
-			# self.block = True
 			editor.blockSignals(True)
 			index.model().setData(index, editor.toPlainText(), Qt.EditRole)
 			print "text changed"
 			print editor.toHtml()
 
 			editor.blockSignals(False)
-			# self.block = False
-
 
 		editor.textChanged.connect(text_changed)
 
@@ -131,12 +121,10 @@ class FuncEditorDelegate(QStyledItemDelegate):
 		cursor.movePosition(QTextCursor.End);
 		editor.setTextCursor(cursor);
 
-		pass
 
 	def sizeHint(self, option, index):
 		item = self.parent().item(index.row())
 		doc = QTextDocument()
-		# highlight = syntax.PythonHighlighter(doc, is_dark = not item.has_script)
 
 		font = QFont("Courier")
 		font.setFamily("Courier");
@@ -145,30 +133,20 @@ class FuncEditorDelegate(QStyledItemDelegate):
 		font.setPointSize(self.parent().font().pointSize());
 		doc.setDefaultFont(font)
 
-		# tab_stop = 4;  # 4 characters
-		# metrics = QFontMetrics(font)
-
-		text = index.data(Qt.EditRole)
-	
+		text = index.data(Qt.EditRole)	
 		text = text.replace("\t", ''.join([' '] * 4))
-
-		# print ":".join("{:02x}".format(ord(c)) for c in text)
-
+		
 		doc.setPlainText(text)
-
 		doc.setDefaultStyleSheet("background-color: red;")
-
+		
 		return QSize(doc.size().width(), doc.size().height())
 
 
 	def paint(self, painter, option, index):
 
-		item = self.parent().item(index.row())
-
-		# print option.backgroundBrush.color().name()
-		
-
 		is_dark = True
+
+		item = self.parent().item(index.row())
 
 		if item.faulty:
 			pen = QPen(QColor(255, 117, 117), 3)
@@ -185,19 +163,6 @@ class FuncEditorDelegate(QStyledItemDelegate):
 		else:
 			painter.fillRect(option.rect, Qt.white)
 			is_dark = False
-			
-
-		
-		# color = item.background().color()
-		# painter.fillRect(option.rect, color)
-		
-		
-
-
-
-		# print dir(option)
-
-		# return
 
 		doc = QTextDocument()
 		highlight = syntax.PythonHighlighter(doc, is_dark = is_dark)
@@ -209,25 +174,16 @@ class FuncEditorDelegate(QStyledItemDelegate):
 		font.setPointSize(self.parent().font().pointSize())
 		doc.setDefaultFont(font)
 
-		# tab_stop = 4;  # 4 characters
-		# metrics = QFontMetrics(font)
 
-		text = index.data(Qt.EditRole)
-	
+		text = index.data(Qt.EditRole)	
 		text = text.replace("\t", ''.join([' '] * 4))
 
-		# print ":".join("{:02x}".format(ord(c)) for c in text)
-
 		doc.setPlainText(text)
-
 		doc.setDefaultStyleSheet("background-color: red;")
-
 
 		painter.translate(option.rect.topLeft())
 		doc.drawContents(painter)
 		painter.resetTransform()
-
-		pass
 
 
 
@@ -243,7 +199,6 @@ class FuncWidget(QWidget):
 	SELECT_BY_NAME = 0
 	SELECT_BY_MSGTYPE = 1
 
-	# _column_names = ['topic', 'type', 'bandwidth', 'rate', 'value', 'checkbox']
 	_column_names = ['topic', 'type', 'value', 'checkbox']
 
 	def __init__(self, plugin=None, selected_topics=None, select_topic_type=SELECT_BY_NAME):
@@ -258,111 +213,66 @@ class FuncWidget(QWidget):
 		"""
 		super(FuncWidget, self).__init__()
 
-		self.list_available_functions = rospy.ServiceProxy('/list_available_functions', ListAvailableFunctions)
-
-		self.functions = function.load_functions()
-
-		# print "FUNCTIONS:", self.functions
-		
-
-		self._select_topic_type = select_topic_type
-
 		rp = rospkg.RosPack()
 		ui_file = os.path.join(rp.get_path('rqt_dyn_tune'), 'resource', 'FuncWidget.ui')
 		loadUi(ui_file, self)
+		
 		self._plugin = plugin
+		self.list_available_functions = rospy.ServiceProxy('/list_available_functions', ListAvailableFunctions)
+		self.functions = function.load_functions()
+		self._select_topic_type = select_topic_type
+		self.topics_tree_widget = self.widget_topic.topics_tree_widget
+
+		self.execs = {}
+		self.values = {}
+		self.items = {}
+
+		
 
 
 		self.hLayout_0.setStretchFactor(self.vLayout_0, 5)
 		self.hLayout_0.setStretchFactor(self.gridLayout, 2)
 
-		# print ">>>>>>>>>>>>" ,plugin
-
-		self.topics_tree_widget = self.widget_topic.topics_tree_widget
 
 		@Slot(dict)
 		def selection_changed(data):
 			self.func_list.clear()
-			funcs = self.list_available_functions(self.widget_topic.get_selected_types()).functions
-			# funcs = self.widget_topic.get_selected_types()
-			print funcs
+			funcs = self.list_available_functions(self.widget_topic.get_selected_types()).functions			
 
 			for func in funcs:
 				item = QListWidgetItem()				
 				item.setData(Qt.UserRole, func)
 				item.setText(func + "(...)")
 				item.setTextAlignment(Qt.AlignRight | Qt.AlignVCenter)
-				
 				self.func_list.addItem(item)
-
-
-
-
 
 			self.block_label.setText("")
 
-			
 
-			# item = self.func_list.item(0)
-			# label = StyledLabel("salam")
-			# self.func_list.setItemWidget(item, label)
+		self.add_button.clicked.connect(self.add_button_clicked)
+		self.add_script.clicked.connect(self.add_script_clicked)
 
-			# print "#\n#\n#\nthe selcted items are:", data, "\n\n"
+		self.widget_topic.topicsRefreshed.connect(self.topics_refreshed)        
+		self.widget_topic.selectionChanged.connect(selection_changed)
+		
+		self.widget_topic.selectionChanged.emit([])
 
 
-		self.block_list.setWordWrap(True)
-		self.block_list.setTextElideMode(Qt.ElideNone)
-
+		delegate = FuncEditorDelegate(self.block_list)
 		font = QFont("Monospace")
 
 		self.block_list.setFont(font)
-
-		self.widget_topic.selectionChanged.connect(selection_changed)
-		self.widget_topic.selectionChanged.emit([])
-
-		self.widget_topic.topicsRefreshed.connect(self.topics_refreshed)        
-
-		delegate = FuncEditorDelegate(self.block_list)
-
 		self.block_list.setItemDelegate(delegate)
 		self.block_list.setContentsMargins(100,10,10,100)
-
-		self.execs = {}
-
-		self.values = {}
-
-		self.items = {}
-
-		self.add_button.clicked.connect(self.add_button_clicked)
-
-		self.add_script.clicked.connect(self.add_script_clicked)
-
-		# icon_uri = os.path.join(rp.get_path('rqt_dyn_tune'), 'resource', 'python-btns-normal.png')
-		# self.add_script.setIcon(QIcon(icon_uri))
-		# self.add_script.setIconSize(QSize(25,25))
-
-
-		# self.add_script.setIcon(self.style().standardIcon(getattr(QStyle, i)))
-
-		# for i in range(10):
-		#     self.func_list.addItem("Item " + str(i))
-
-
-		def data_changed(item):
-			print "data changed for ", item
-
-		self.block_list.itemChanged.connect(data_changed)
-
-		self.block_list.setSelectionMode(QAbstractItemView.SingleSelection);
-		self.block_list.setDragEnabled(True);
-		self.block_list.viewport().setAcceptDrops(True);
-		self.block_list.setDropIndicatorShown(True);
-		self.block_list.setDragDropMode(QAbstractItemView.InternalMove);
-
+		self.block_list.setWordWrap(True)
+		self.block_list.setTextElideMode(Qt.ElideNone)		
+		self.block_list.setSelectionMode(QAbstractItemView.SingleSelection)
+		self.block_list.setDragEnabled(True)
+		self.block_list.viewport().setAcceptDrops(True)
+		self.block_list.setDropIndicatorShown(True)
+		self.block_list.setDragDropMode(QAbstractItemView.InternalMove)
 		self.block_list.setMouseTracking(True)
-
 		self.block_list.setVerticalScrollMode(QAbstractItemView.ScrollPerPixel)
-
 		self.block_list.setSpacing(3)
 
 		self.block_list.addItem( ListBlockItem("\"\"\"\n" \
@@ -374,11 +284,8 @@ class FuncWidget(QWidget):
 
 
 		self.func_list.setAlternatingRowColors(True)
-		# self.func_list.setTextAlignment(Qt.AlignRight)
 		self.func_list.itemSelectionChanged.connect(self.func_list_changed)
-
 		self.func_ret.setAutoFillBackground(True)
-
 
 		completer = QCompleter(self.block_list.model())
 		completer = QCompleter(["bob", "bobby", "bud", "charles", "charlie"], self.func_ret)
@@ -398,7 +305,6 @@ class FuncWidget(QWidget):
 		self.func_ret.setCompleter(self.completer)
 
 		# connect signals
-
 		def filter(text):
 			print "Edited: ", text, "type: ", type(text)
 			self.pFilterModel.setFilterFixedString(str(text))
@@ -422,7 +328,6 @@ class FuncWidget(QWidget):
 
 
 		def assign_var_text_changed(text = None):
-			print "text changed"
 			if text == None:
 				text = self.assign_var.text()
 			font = self.assign_var.font()
@@ -441,7 +346,7 @@ class FuncWidget(QWidget):
 
 
 	def func_list_changed(self, *_):
-		print "func list changed"
+
 
 		args = self.widget_topic.get_selected()
 		func = self.func_list.selectedItems()
@@ -449,13 +354,10 @@ class FuncWidget(QWidget):
 		if func and args:
 			func = func[0].data(Qt.UserRole)		
 			first = " = {0}( ".format(func)
-			# spcs = len(first)
-			# joint = ',\n' + ''.join([' '] * spcs)
 			joint = ', '
 			second = "{0} )".format(joint.join(args))
 
 			self.block_label.setText(first + second)
-
 			self.assign_var.setFocus()
 			self.assign_var.selectAll()
 
@@ -484,8 +386,6 @@ class FuncWidget(QWidget):
 			joint = ',\n' + ''.join([' '] * spcs)
 			second = "{0} )".format(joint.join(args))
 
-			# item = QListWidgetItem( (first + second) ) 
-
 			item = ListBlockItem((first + second), 
 									func = self.functions[func], 
 									args = args, 
@@ -501,27 +401,9 @@ class FuncWidget(QWidget):
 
 			self.widget_topic.clear_selection()
 			self.block_label.setText("")
-
-			# self.execs.update({item:(func, args, retvar)})
-
-
-
-			# tab_stop = 4;  # 4 characters
-
-			# metrics = QFontMetrics(font)
-			# editor.setTabStopWidth(tab_stop * metrics.width(' '));
-
 			self.block_list.addItem(item)
-			# self.block_list.addItem((func, args))
-
 			self.func_ret.setCurrentText(retvar)
-
-			
-
-
-			
-
-			
+	
 
 	def resolve_type(self, msg):
 		if hasattr(msg, '_type') and type(msg) != type:
@@ -557,9 +439,7 @@ class FuncWidget(QWidget):
 		func.arg_types = "[\"*\", []]"
 		func.description = desc
 
-
 		return func
-		pass
 
 
 	def topics_refreshed(self, values = {}):
@@ -611,16 +491,6 @@ class FuncWidget(QWidget):
 
 				print self.values
 				print "deleting", key
-
-		# print self.values
-
-			# topic_widget._recursive_create_widget_items(topic_widget.topics_tree_widget, key, "string", value)            
-
-		
-
-		#     pass
-
-		pass
 
 	def start(self):
 		# self.widget_topic.start()
@@ -693,22 +563,17 @@ class ListBlockItem(QListWidgetItem):
 				script = self.data(Qt.EditRole)
 				exec(script, values, values)
 
-				# print "running ", script
 
 			print "block executed successfullly"
 			self.faulty = False
 			self.setData(Qt.UserRole, False)
-			# TODO: mark the block as functional
 		except:
 			print "block is faulty"
 
 			import traceback
 			traceback.print_exc()
-			# e = sys.exc_info()[0]
-			# print e.message
 			self.faulty = True
 			self.setData(Qt.UserRole, True)
-			# TODO: mark the block as faulty
 			
 			pass
 
@@ -716,47 +581,17 @@ class ListBlockItem(QListWidgetItem):
 	   
 
 	def setData(self, role, value):
-		
-		# if role == Qt.EditRole:
 		super(ListBlockItem, self).setData(role, value)
 
-		# print "setting data for role = {0} and value = {1}".format(role, value)
-
-		# self.blockSignals(False)
-
-
-# class TreeWidgetItem(QTreeWidgetItem):
-
-# 	def __init__(self, check_state_changed_callback, topic_name, parent=None, is_topic = False):
-# 		super(TreeWidgetItem, self).__init__(parent)
-# 		self._check_state_changed_callback = check_state_changed_callback
-# 		self._topic_name = topic_name
-# 		# self.setCheckState(3, Qt.Unchecked)
-# 		self._is_topic = is_topic
-
-# 	def setData(self, column, role, value):
-# 		if role == Qt.CheckStateRole:
-# 			state = self.checkState(column)
-		
-# 		# if state:
-# 		#     super(TreeWidgetItem, self).setData(column, Qt.UserRole, self._selected_items.index(self._topic_name))    
-
-# 		super(TreeWidgetItem, self).setData(column, role, value)
-
-# 		if role == Qt.CheckStateRole and state != self.checkState(column):
-# 			self._check_state_changed_callback(self._topic_name)
 
 class StyledLabel(QLabel):
-	# def repaint(self, rect):
 
 	clicked = Signal(name='clicked')
 
 	def __init__(self, parent = None, flags = 0):
 		super(QLabel, self).__init__(parent=parent)
 		self.size =  None # QSize(0., 0.)
-		# self.is_resizable = True
 		self.is_resizable = True
-		# self.width = 0.
 
 	def mousePressEvent(self, event):
 		self.clicked.emit()
@@ -766,52 +601,33 @@ class StyledLabel(QLabel):
 			return super(QLabel, self).sizeHint()
 
 		doc = QTextDocument()
-		# highlight = syntax.PythonHighlighter(doc, is_dark = True)
-
-
 
 		font = self.font()
-		# font.setFamily("Courier");	
 		font.setStyleHint(QFont.Monospace);
 		font.setFixedPitch(True);
-		# font.setPointSize(self.font().pointSize());
 		doc.setDefaultFont(font)
 
 		text = self.text()
-		# doc.setTextWidth(self.width())
-
 		doc.setPlainText(text)
 
 		size = QSize(doc.size().width(), doc.size().height())
 
-		if size != None:
-			
+		if size != None:			
 			return size
 
 		return super(QLabel, self).sizeHint()
-		# return QSize(150, 150)
 
 	def paintEvent(self, event):
-		# super(QLabel, self).repaint(rect)
 		painter = QPainter(self)
 
-		# print "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@2", event.rect()
-
-		# painter.fillRect(event.rect(), Qt.darkGray)
-
 		doc = QTextDocument()
-
 		highlight = syntax.PythonHighlighter(doc, is_dark = True, default = ['white'])
 
 		font = self.font()
-		# font.setFamily("Courier");	
 		font.setStyleHint(QFont.Monospace);
 		font.setFixedPitch(True);
-		# font.setPointSize(self.font().pointSize());
 		doc.setDefaultFont(font)
 		self.width = event.rect().width()
-		# doc.setTextWidth(self.width())
-
 		text = self.text()
 
 		doc.setPlainText(text)
@@ -821,9 +637,4 @@ class StyledLabel(QLabel):
 		painter.resetTransform()
 
 		self.size = doc.size()
-
-		
-
-		# print "repainting"
-		pass
 

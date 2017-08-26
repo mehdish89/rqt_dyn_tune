@@ -59,32 +59,22 @@ class MyBagWidget(BagWidget):
 
         self._timeline._player = MyPlayer(self._timeline)
         self.config_timeline_frame()
-
         self.graphics_view.setBackgroundBrush(QBrush(QColor(127,127,127)))
 
-
-        self.filename = ''
-
-        slabel = StyledLabel(self)
-        
-
+        slabel = StyledLabel(self)      
         layout = self.horizontalLayout
-
         self.horizontalLayout.takeAt(0)
-
-
         last = self.horizontalLayout.count() - 1
         self.horizontalLayout.takeAt(last)
         self.horizontalLayout.insertWidget(-1, slabel, 1)
+
+        self.filename = ''
 
 
     def sizeHint(self):
         TOPIC_HEIGHT = 27
         PADDING = 60 + 75
         height = TOPIC_HEIGHT * len(self._timeline._get_topics()) + PADDING
-
-        # return self.graphics_view.sizeHint()
-
         return QSize(0, height)
 
     def _parse_args(self, argv):
@@ -213,20 +203,15 @@ class MyBagWidget(BagWidget):
         self._margin_left = 30
         self._margin_right = 20
         self._margin_bottom = 20
-        self._history_top = 30
 
 
 class DynTuneUI(Plugin):
 
     loggerUpdate = Signal(str, name='loggerUpdate')
 
-
-    
-
     def __init__(self, context):
         super(DynTuneUI, self).__init__(context)
         
-        # rospy.init_node('rqt_dyn_tune')
         # Give QObjects reasonable names
         self.setObjectName('dyn_tune_plugin')
 
@@ -244,10 +229,7 @@ class DynTuneUI(Plugin):
 
         # Create QWidget
         self._widget = QWidget()
-
         self._bag_widget = MyBagWidget(context)
-
-
 
         # Get path to UI file which should be in the "resource" folder of this package
         ui_file = os.path.join(rospkg.RosPack().get_path('rqt_dyn_tune'), 'resource', 'DynTune.ui')
@@ -269,33 +251,17 @@ class DynTuneUI(Plugin):
         #     self._widget.setWindowTitle(self._widget.windowTitle() + (' (%d)' % context.serial_number()))
         # Add widget to the user interface
         context.add_widget(self._widget)
-        # context.add_widget(self._bag_widget)
-
-
+        
         index = self._widget._widget_values._column_names.index("checkbox")
         self._widget._widget_values.topics_tree_widget.hideColumn(index)
-
-        # index = self._widget._widget_values._column_names.index("topic")
         self._widget._widget_values.topics_tree_widget.model().setHeaderData(0, Qt.Horizontal,"value");
 
         self._widget._widget_func.start()
         self._widget._widget_values.start()
         self._widget._widget_param.start()
-        # self._widget._widget_values.start()
-
-        # self._widget.tree_widget.setAlternatingRowColors(True)
-        # self._widget._widget_func.topics_tree_widget.setAlternatingRowColors(True)
-        # self._widget._widget_param.topics_tree_widget.setAlternatingRowColors(True)
 
         rospy.Subscriber("/rosout", Log, self.logger_update)
-
         self.loggerUpdate.connect(self.logger_update_slot)
-
-
-
-
-
-
 
 
         css_file = os.path.join(rospkg.RosPack().get_path('rqt_dyn_tune'), 'src', 'rqt_dyn_tune', 'css', 'selector.css')
@@ -320,10 +286,6 @@ class DynTuneUI(Plugin):
 
 
         self._widget.tune_btn.clicked.connect(self.tune_clicked)
-
-
-        # self._widget._widget_param.selectionChanged.connect(selection_changed)
-
 
         @Slot()
         def topics_refreshed():
