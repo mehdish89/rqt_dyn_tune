@@ -190,9 +190,7 @@
 
                         <item row="2" column="2" colspan="2">
                             <widget class='QComboBox' name="func_ret">
-                              <property name="currentText">
-                                <string> _____ </string>
-                              </property>
+
 
                               <!-- <property name="maximumWidth">
                                 <number>200</number>

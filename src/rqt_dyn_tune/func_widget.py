@@ -35,8 +35,8 @@ import os
 import sys
 
 from python_qt_binding import loadUi
-from python_qt_binding.QtCore import Qt, QTimer, Signal, Slot, QSize, QRectF, QSizeF, Property, QSortFilterProxyModel
-from python_qt_binding.QtGui import QIcon, QFont, QFontMetrics, QTextDocument, QTextOption, QPen, QPainter, QColor, QTextCursor
+from python_qt_binding.QtCore import Qt, QTimer, Signal, Slot, QSize, QRectF, QSizeF, Property
+from python_qt_binding.QtGui import QIcon, QFont, QFontMetrics, QTextDocument, QTextOption, QPen, QPainter, QColor, QTextCursor, QSortFilterProxyModel
 from python_qt_binding.QtWidgets import QHBoxLayout, QVBoxLayout, QGridLayout, QLabel, QPlainTextEdit, QListWidget, QCompleter
 from python_qt_binding.QtWidgets import QStyledItemDelegate, QItemDelegate, QPushButton, QLineEdit, QTextEdit
 from python_qt_binding.QtWidgets import QSlider, QAbstractItemView, QListWidgetItem, QStyleOptionViewItem
