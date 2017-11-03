@@ -49,7 +49,7 @@
   <run_depend>rqt_gui_py</run_depend>
   <run_depend>dynamic_reconfigure</run_depend>
   <run_depend>roslib</run_depend>
-  <run_depend>rospkg</run_depend>
+  <!-- <run_depend>rospkg</run_depend> -->
   <run_depend>python_qt_binding</run_depend>
   <!-- <run_depend>dyn_tune</run_depend> -->  <!-- remove the depency temporarily to handle the build error for indexing -->
   <!-- TODO: add the dependency -->
